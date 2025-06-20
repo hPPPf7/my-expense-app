@@ -1,3 +1,4 @@
+// src/app/(auth)/personal/layout.tsx
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { PageHeader } from "@/components/PageHeader";
 import { ReactNode } from "react";
@@ -5,7 +6,7 @@ import { ReactNode } from "react";
 export default function PersonalLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-      <div className="p-6 space-y-6">
+      <div className="pt-0 pl-6 pr-6 pb-6 space-y-6">
         <PageHeader />
         {children}
       </div>

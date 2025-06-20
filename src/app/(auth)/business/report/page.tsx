@@ -144,15 +144,21 @@ export default function ReportPage() {
         <h2 className="text-lg font-semibold mb-2">月度收支長條圖</h2>
         <Card>
           <CardContent className="p-4">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={barData}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="支出" stackId="a" fill="#f87171" />
-                <Bar dataKey="收入" stackId="a" fill="#34d399" />
-              </BarChart>
-            </ResponsiveContainer>
+            {barData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={barData}>
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip cursor={false} />
+                  <Bar dataKey="支出" stackId="a" fill="#f87171" />
+                  <Bar dataKey="收入" stackId="a" fill="#34d399" />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="text-sm text-muted-foreground text-center py-12">
+                目前沒有可顯示的月度資料
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

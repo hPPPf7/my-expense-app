@@ -87,7 +87,7 @@ export default function ReminderPage() {
 
       <div className="flex flex-col sm:flex-row gap-2">
         <Input
-          placeholder="提醒項目（如 Netflix、電信帳單）"
+          placeholder="提醒項目"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />

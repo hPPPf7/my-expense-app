@@ -27,7 +27,7 @@ export default function BusinessReminderPage() {
 
       const remindersRef = collection(
         db,
-        "business-reminders",
+        "reminders",
         auth.currentUser.uid,
         "items"
       );
@@ -50,7 +50,7 @@ export default function BusinessReminderPage() {
 
     const remindersRef = collection(
       db,
-      "business-reminders",
+      "reminders",
       auth.currentUser.uid,
       "items"
     );
@@ -68,13 +68,7 @@ export default function BusinessReminderPage() {
   const deleteReminder = async (id: string) => {
     if (!auth.currentUser) return;
 
-    const reminderDoc = doc(
-      db,
-      "business-reminders",
-      auth.currentUser.uid,
-      "items",
-      id
-    );
+    const reminderDoc = doc(db, "reminders", auth.currentUser.uid, "items", id);
     await deleteDoc(reminderDoc);
 
     setReminders((prev) => prev.filter((item) => item.id !== id));
@@ -93,7 +87,7 @@ export default function BusinessReminderPage() {
 
       <div className="flex flex-col sm:flex-row gap-2">
         <Input
-          placeholder="提醒項目（如 AWS伺服器、租金帳單）"
+          placeholder="提醒項目"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />

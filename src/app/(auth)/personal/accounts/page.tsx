@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { db, auth } from "@/lib/firebase";
 import {
   getDocs,
@@ -20,6 +26,11 @@ export default function AccountsPage() {
   >([]);
   const [newAccount, setNewAccount] = useState("");
   const [newBalance, setNewBalance] = useState("");
+  const [editing, setEditing] = useState<null | {
+    id: string;
+    name: string;
+    balance: number;
+  }>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,7 +48,6 @@ export default function AccountsPage() {
           name: doc.data().name,
           balance: doc.data().balance ?? 0,
         }));
-
         setAccounts(accountsList);
         setLoading(false);
       }
@@ -85,23 +95,23 @@ export default function AccountsPage() {
     }
   };
 
-  const updateBalance = async (accountId: string, newBalance: number) => {
-    if (auth.currentUser) {
-      const accountDoc = doc(
-        db,
-        "accounts",
-        auth.currentUser.uid,
-        "userAccounts",
-        accountId
-      );
-      await updateDoc(accountDoc, { balance: newBalance });
-
-      setAccounts((prev) =>
-        prev.map((acc) =>
-          acc.id === accountId ? { ...acc, balance: newBalance } : acc
-        )
-      );
-    }
+  const saveEdit = async () => {
+    if (!editing || !auth.currentUser) return;
+    const ref = doc(
+      db,
+      "accounts",
+      auth.currentUser.uid,
+      "userAccounts",
+      editing.id
+    );
+    await updateDoc(ref, {
+      name: editing.name,
+      balance: editing.balance,
+    });
+    setAccounts((prev) =>
+      prev.map((acc) => (acc.id === editing.id ? { ...acc, ...editing } : acc))
+    );
+    setEditing(null); // 關閉彈窗
   };
 
   return (
@@ -124,6 +134,44 @@ export default function AccountsPage() {
         <Button onClick={addAccount}>新增帳戶</Button>
       </div>
 
+      {/* 編輯 Dialog */}
+      <Dialog
+        open={!!editing}
+        onOpenChange={(open) => !open && setEditing(null)}
+      >
+        <DialogContent>
+          <DialogTitle>編輯帳戶</DialogTitle>
+          {editing && (
+            <div className="flex flex-col gap-3 pt-2">
+              <Input
+                value={editing.name}
+                onChange={(e) =>
+                  setEditing({ ...editing, name: e.target.value })
+                }
+                placeholder="帳戶名稱"
+              />
+              <Input
+                type="number"
+                value={editing.balance}
+                onChange={(e) =>
+                  setEditing({
+                    ...editing,
+                    balance: parseFloat(e.target.value) || 0,
+                  })
+                }
+                placeholder="餘額"
+              />
+              <div className="flex justify-end gap-2 pt-2">
+                <Button variant="outline" onClick={() => setEditing(null)}>
+                  取消
+                </Button>
+                <Button onClick={saveEdit}>儲存</Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* 帳戶列表 */}
       <div className="mt-4 space-y-2">
         {loading ? (
@@ -143,17 +191,9 @@ export default function AccountsPage() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Input
-                    type="number"
-                    defaultValue={account.balance}
-                    onBlur={(e) => {
-                      const updatedBalance = parseFloat(e.target.value) || 0;
-                      if (updatedBalance !== account.balance) {
-                        updateBalance(account.id, updatedBalance);
-                      }
-                    }}
-                    className="w-24"
-                  />
+                  <Button size="sm" onClick={() => setEditing(account)}>
+                    編輯
+                  </Button>
                   <Button
                     size="sm"
                     variant="outline"
