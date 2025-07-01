@@ -45,7 +45,7 @@ export default function TransferPage() {
         const userId = auth.currentUser.uid;
 
         // 讀取帳戶列表
-        const accountsRef = collection(db, "accounts", userId, "userAccounts");
+        const accountsRef = collection(db, "users", userId, "accounts");
         const accountsSnapshot = await getDocs(accountsRef);
         const accountsList = accountsSnapshot.docs.map(
           (doc) => doc.data().name
@@ -110,7 +110,7 @@ export default function TransferPage() {
       setRecords((prev) => [{ id: docRef.id, ...transferRecord }, ...prev]);
 
       // 新增支出紀錄 (轉出)
-      const expenseRef = collection(db, "records", userId, "items");
+      const expenseRef = collection(db, "users", userId, "records");
       await addDoc(expenseRef, {
         type: "支出",
         category: "轉帳支出",
@@ -123,7 +123,7 @@ export default function TransferPage() {
       });
 
       // 新增收入紀錄 (轉入)
-      const incomeRef = collection(db, "records", userId, "items");
+      const incomeRef = collection(db, "users", userId, "records");
       await addDoc(incomeRef, {
         type: "收入",
         category: "轉帳收入",

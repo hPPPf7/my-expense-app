@@ -33,7 +33,7 @@ export default function BusinessHomePage() {
       if (!auth.currentUser) return;
       const userId = auth.currentUser.uid;
 
-      const accountsRef = collection(db, "accounts", userId, "userAccounts");
+      const accountsRef = collection(db, "users", userId, "accounts");
       const accountsSnap = await getDocs(accountsRef);
       const accList: string[] = [];
       const accBalance: Record<string, number> = {};
@@ -47,12 +47,7 @@ export default function BusinessHomePage() {
       setAccounts(accList);
       setBalance(accBalance);
 
-      const categoriesRef = collection(
-        db,
-        "categories",
-        userId,
-        "userCategories"
-      );
+      const categoriesRef = collection(db, "users", userId, "categories");
       const categoriesSnap = await getDocs(categoriesRef);
       const catList: string[] = categoriesSnap.docs.map(
         (doc) => doc.data().name

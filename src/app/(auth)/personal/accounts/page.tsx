@@ -33,9 +33,9 @@ export default function AccountsPage() {
       if (auth.currentUser) {
         const accountsRef = collection(
           db,
-          "accounts",
+          "users",
           auth.currentUser.uid,
-          "userAccounts"
+          "accounts"
         );
         const snapshot = await getDocs(accountsRef);
         const accountsList = snapshot.docs.map((doc) => ({
@@ -55,9 +55,9 @@ export default function AccountsPage() {
     if (newAccount && auth.currentUser) {
       const accountsRef = collection(
         db,
-        "accounts",
+        "users",
         auth.currentUser.uid,
-        "userAccounts"
+        "accounts"
       );
       const docRef = await addDoc(accountsRef, {
         name: newAccount,
@@ -80,9 +80,9 @@ export default function AccountsPage() {
     if (auth.currentUser) {
       const accountDoc = doc(
         db,
-        "accounts",
+        "users",
         auth.currentUser.uid,
-        "userAccounts",
+        "accounts",
         accountId
       );
       await deleteDoc(accountDoc);
@@ -92,13 +92,7 @@ export default function AccountsPage() {
 
   const saveEdit = async () => {
     if (!editing || !auth.currentUser) return;
-    const ref = doc(
-      db,
-      "accounts",
-      auth.currentUser.uid,
-      "userAccounts",
-      editing.id
-    );
+    const ref = doc(db, "users", auth.currentUser.uid, "accounts", editing.id);
     await updateDoc(ref, {
       name: editing.name,
       balance: editing.balance,

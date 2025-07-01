@@ -23,7 +23,7 @@ export default function BalancePage() {
       if (!auth.currentUser) return;
 
       const userId = auth.currentUser.uid;
-      const accountsRef = collection(db, "accounts", userId, "userAccounts");
+      const accountsRef = collection(db, "users", userId, "accounts");
       const snapshot = await getDocs(accountsRef);
 
       const accountList = snapshot.docs.map((doc) => {
@@ -50,7 +50,7 @@ export default function BalancePage() {
     if (!auth.currentUser) return;
     const userId = auth.currentUser.uid;
 
-    const accountRef = doc(db, "accounts", userId, "userAccounts", accountId);
+    const accountRef = doc(db, "users", userId, "accounts", accountId);
     const newBalance = parseFloat(editingBalance);
 
     if (!isNaN(newBalance)) {

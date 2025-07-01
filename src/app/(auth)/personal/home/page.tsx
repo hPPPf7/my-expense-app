@@ -49,7 +49,7 @@ export default function HomePage() {
       const userId = auth.currentUser.uid;
 
       // 讀取帳戶
-      const accountsRef = collection(db, "accounts", userId, "userAccounts");
+      const accountsRef = collection(db, "users", userId, "accounts");
       const accountsSnapshot = await getDocs(accountsRef);
       const accList = accountsSnapshot.docs.map((doc) => {
         const data = doc.data();

@@ -77,18 +77,13 @@ export default function RecordHistoryPage() {
       const userId = auth.currentUser.uid;
 
       // 讀取帳戶
-      const accountsRef = collection(db, "accounts", userId, "userAccounts");
+      const accountsRef = collection(db, "users", userId, "accounts");
       const accountsSnap = await getDocs(accountsRef);
       const accountList = accountsSnap.docs.map((doc) => doc.data().name);
       setAccounts(accountList.length ? accountList : ["現金"]); // 如果沒帳戶，給一個現金帳戶
 
       // 讀取分類
-      const categoriesRef = collection(
-        db,
-        "categories",
-        userId,
-        "userCategories"
-      );
+      const categoriesRef = collection(db, "users", userId, "categories");
       const categoriesSnap = await getDocs(categoriesRef);
       if (categoriesSnap.empty) {
         // 如果還沒有分類，先新增一批預設分類
@@ -103,7 +98,7 @@ export default function RecordHistoryPage() {
       }
 
       // 讀取記帳紀錄
-      const recordsRef = collection(db, "records", userId, "items");
+      const recordsRef = collection(db, "users", userId, "records");
       const q = query(recordsRef, orderBy("date", "desc"));
       const recordsSnap = await getDocs(q);
       const recordList = recordsSnap.docs.map((doc) => ({
@@ -149,9 +144,9 @@ export default function RecordHistoryPage() {
 
     const recordRef = doc(
       db,
-      "records",
+      "users",
       auth.currentUser.uid,
-      "items",
+      "records",
       editItem.id
     );
     await updateDoc(recordRef, {
@@ -172,9 +167,9 @@ export default function RecordHistoryPage() {
 
     const recordRef = doc(
       db,
-      "records",
+      "users",
       auth.currentUser.uid,
-      "items",
+      "records",
       editItem.id
     );
     await deleteDoc(recordRef);

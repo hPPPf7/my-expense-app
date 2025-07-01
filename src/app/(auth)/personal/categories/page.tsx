@@ -22,9 +22,9 @@ export default function CategoryManagementPage() {
       if (!auth.currentUser) return;
       const categoriesRef = collection(
         db,
-        "categories",
+        "users",
         auth.currentUser.uid,
-        "userCategories"
+        "categories"
       );
       const snapshot = await getDocs(categoriesRef);
       const categoryList = snapshot.docs.map((doc) => doc.data().name);
@@ -38,9 +38,9 @@ export default function CategoryManagementPage() {
     if (!newCategory.trim() || !auth.currentUser) return;
     const categoriesRef = collection(
       db,
-      "categories",
+      "users",
       auth.currentUser.uid,
-      "userCategories"
+      "categories"
     );
     await addDoc(categoriesRef, { name: newCategory.trim() });
     setCategories((prev) => [...prev, newCategory.trim()]);
@@ -51,9 +51,9 @@ export default function CategoryManagementPage() {
     if (!auth.currentUser) return;
     const categoriesRef = collection(
       db,
-      "categories",
+      "users",
       auth.currentUser.uid,
-      "userCategories"
+      "categories"
     );
     const snapshot = await getDocs(categoriesRef);
     const docToDelete = snapshot.docs.find(

@@ -67,18 +67,13 @@ export default function BusinessRecordHistoryPage() {
       const userId = auth.currentUser.uid;
 
       // 讀取帳戶
-      const accountsRef = collection(db, "accounts", userId, "userAccounts");
+      const accountsRef = collection(db, "users", userId, "accounts");
       const accountsSnap = await getDocs(accountsRef);
       const accountList = accountsSnap.docs.map((doc) => doc.data().name);
       setAccounts(accountList.length ? accountList : ["現金"]);
 
       // 讀取商業分類
-      const categoriesRef = collection(
-        db,
-        "business-categories",
-        userId,
-        "userCategories"
-      );
+      const categoriesRef = collection(db, "users", userId, "categories");
       const categoriesSnap = await getDocs(categoriesRef);
       if (categoriesSnap.empty) {
         // 如果沒有分類，新增預設

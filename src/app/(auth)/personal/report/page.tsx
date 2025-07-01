@@ -41,7 +41,7 @@ export default function ReportPage() {
       if (!auth.currentUser) return;
       const userId = auth.currentUser.uid;
 
-      const recordsRef = collection(db, "records", userId, "items");
+      const recordsRef = collection(db, "users", userId, "records");
       const snapshot = await getDocs(recordsRef);
 
       const data = snapshot.docs.map((doc) => doc.data()) as RecordItem[];

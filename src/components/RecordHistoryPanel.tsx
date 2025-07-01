@@ -88,13 +88,12 @@ export function RecordHistoryPanel({ mode }: PanelProps) {
       if (!auth.currentUser) return;
       const userId = auth.currentUser.uid;
 
-      const accountsRef = collection(db, "accounts", userId, "userAccounts");
+      const accountsRef = collection(db, "users", userId, "accounts");
       const accountsSnap = await getDocs(accountsRef);
       const accountList = accountsSnap.docs.map((doc) => doc.data().name);
       setAccounts(accountList.length ? accountList : ["現金"]);
 
-      const catCol = mode === "business" ? "business-categories" : "categories";
-      const categoriesRef = collection(db, catCol, userId, "userCategories");
+      const categoriesRef = collection(db, "users", userId, "categories");
       const categoriesSnap = await getDocs(categoriesRef);
 
       const defaultCats =
@@ -115,7 +114,7 @@ export function RecordHistoryPanel({ mode }: PanelProps) {
         setCategories(catList);
       }
 
-      const recordsRef = collection(db, "records", userId, "items");
+      const recordsRef = collection(db, "users", userId, "records");
       const q = query(recordsRef, orderBy("date", "desc"));
       const recordsSnap = await getDocs(q);
       const recordList = recordsSnap.docs.map((doc) => ({
@@ -159,9 +158,9 @@ export function RecordHistoryPanel({ mode }: PanelProps) {
     if (!editItem || !auth.currentUser) return;
     const recordRef = doc(
       db,
-      "records",
+      "users",
       auth.currentUser.uid,
-      "items",
+      "records",
       editItem.id
     );
     await updateDoc(recordRef, {
@@ -180,9 +179,9 @@ export function RecordHistoryPanel({ mode }: PanelProps) {
     if (!editItem || !auth.currentUser) return;
     const recordRef = doc(
       db,
-      "records",
+      "users",
       auth.currentUser.uid,
-      "items",
+      "records",
       editItem.id
     );
     await deleteDoc(recordRef);

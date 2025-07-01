@@ -76,7 +76,7 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
       if (!auth.currentUser) return;
       const userId = auth.currentUser.uid;
 
-      const accountsRef = collection(db, "accounts", userId, "userAccounts");
+      const accountsRef = collection(db, "users", userId, "accounts");
       const accountsSnapshot = await getDocs(accountsRef);
       const accList = accountsSnapshot.docs.map((doc) => {
         const data = doc.data();
@@ -102,8 +102,7 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
       });
       setLimits(limitList);
 
-      const catCol = mode === "business" ? "business-categories" : "categories";
-      const categoriesRef = collection(db, catCol, userId, "userCategories");
+      const categoriesRef = collection(db, "users", userId, "categories");
       const categoriesSnap = await getDocs(categoriesRef);
 
       const defaultCats =
@@ -208,7 +207,7 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
         note ? `，備註：${note}` : ""
       }`;
 
-      await addDoc(collection(db, "records", userId, "items"), {
+      await addDoc(collection(db, "users", userId, "records"), {
         type: "支出",
         category: "轉帳支出",
         detail: expenseDetail,
@@ -217,7 +216,7 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
         date: recordDate,
       });
 
-      await addDoc(collection(db, "records", userId, "items"), {
+      await addDoc(collection(db, "users", userId, "records"), {
         type: "收入",
         category: "轉帳收入",
         detail: incomeDetail,
@@ -235,7 +234,7 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
         detail,
       };
 
-      await addDoc(collection(db, "records", userId, "items"), recordData);
+      await addDoc(collection(db, "users", userId, "records"), recordData);
 
       if (selectedType === "expense") {
         const matchedLimit = limits.find(

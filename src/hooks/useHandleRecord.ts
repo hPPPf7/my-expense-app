@@ -52,7 +52,7 @@ export function useHandleRecord({
       if (!auth.currentUser || !amount || !selectedAccount) return;
 
       const userId = auth.currentUser.uid;
-      const recordsRef = collection(db, "records", userId, "items");
+      const recordsRef = collection(db, "users", userId, "records");
       const newAmount = parseInt(amount);
       const type = selectedType === "expense" ? "支出" : "收入";
 
@@ -64,13 +64,7 @@ export function useHandleRecord({
         ...(mode === "business" && { category, detail }),
       });
 
-      const accountRef = doc(
-        db,
-        "accounts",
-        userId,
-        "userAccounts",
-        selectedAccount
-      );
+      const accountRef = doc(db, "users", userId, "accounts", selectedAccount);
       const newBalance =
         currentBalance + (selectedType === "income" ? newAmount : -newAmount);
       await updateDoc(accountRef, { balance: newBalance });
