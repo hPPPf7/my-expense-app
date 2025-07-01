@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 使用者基本資料
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 加入：朋友清單（子集合）
+    match /users/{userId}/friends/{friendId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 帳戶資料（共用）
+    match /accounts/{userId}/userAccounts/{accountId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 轉帳紀錄（個人）
+    match /transfer-records/{userId}/records/{recordId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 限額設定（個人）
+    match /limits/{userId}/items/{itemId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 個人收支紀錄
+    match /records/{userId}/items/{recordId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 商業收支紀錄
+    match /business-records/{userId}/items/{recordId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 個人分類設定
+    match /categories/{userId}/userCategories/{categoryId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 商業分類設定
+    match /business-categories/{userId}/userCategories/{categoryId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 續費提醒（共用）
+    match /reminders/{userId}/items/{reminderId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 熱門統計相關（新增頂層文件存取）
+    match /popularClickLogs/{tmdbId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /popularWatchLogs/{tmdbId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /popularWatchedLogs/{tmdbId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 原本的子集合（保留）
+    match /popularWatchLogs/{tmdbId}/users/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /popularWatchedLogs/{tmdbId}/records/{recordId} {
+      allow read: if true;
+      allow write: if request.auth != null || request.auth == null;
+    }
+
+    match /popularClickLogs/{tmdbId}/records/{recordId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 拒絕所有未明確允許的存取
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

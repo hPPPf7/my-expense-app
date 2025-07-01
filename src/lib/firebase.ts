@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore"; // 引入 Firestore
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDxDq_P-GewfphSZvWAh-MOFqhee5Wc_RE",
-  authDomain: "my-expense-app-42fb7.firebaseapp.com",
-  projectId: "my-expense-app-42fb7",
-  storageBucket: "my-expense-app-42fb7.appspot.com",
-  messagingSenderId: "236786057561",
-  appId: "1:236786057561:web:c0746109611b1832520c48",
+  apiKey: process.env.FIREBASE_API_KEY!,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.FIREBASE_APP_ID!,
 };
 
 // 初始化 Firebase 應用，避免多次初始化
