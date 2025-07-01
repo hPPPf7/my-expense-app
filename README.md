@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 我的記帳系統（My Expense App）
 
-## Getting Started
+這是一個使用 Next.js App Router、TypeScript 與 Firestore 打造的**雙模式記帳應用程式**，支援 **個人** 與 **商業** 模式的記帳功能。
 
-First, run the development server:
+## 功能特色
+
+- 快速新增記帳紀錄，並自動更新帳戶餘額
+- 帳戶管理與轉帳功能
+- 分類與提醒管理
+- 支出限額設定與追蹤
+- 圖表報表分析支出與收入
+- 個人與商業模式分開運作，互不干擾
+
+## 技術架構
+
+- Next.js（App Router 模式）
+- React + TypeScript
+- Firebase Firestore
+
+## 開始使用
+
+1. 安裝相依套件：
+
+```bash
+npm install
+```
+
+2. 設定 Firebase 專案環境變數，請建立 `.env.local` 並參考 `.env.example`。
+
+3. 啟動開發伺服器：
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+打開 [http://localhost:3000](http://localhost:3000) 就可以開始使用應用程式。

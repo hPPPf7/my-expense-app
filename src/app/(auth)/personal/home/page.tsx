@@ -14,13 +14,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { auth, db } from "@/lib/firebase";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import { useHandleRecord } from "@/hooks/useHandleRecord";
 
 interface Account {
   id: string;
@@ -104,46 +99,25 @@ export default function HomePage() {
     return today.getTime() <= end.getTime();
   };
 
-  const handleRecord = async () => {
-    if (!amount || !selectedAccount || !auth.currentUser) return;
+  const handleRecord = useHandleRecord({ mode: "personal", limits, setLimits });
 
-    const userId = auth.currentUser.uid;
+  const onRecord = async () => {
+    const acc = accounts.find((a) => a.name === selectedAccount);
+    if (!acc) return;
 
-    // 記錄收支
-    const recordsRef = collection(db, "records", userId, "items");
-    await addDoc(recordsRef, {
-      type: selectedType === "expense" ? "支出" : "收入",
-      amount: parseInt(amount),
-      account: selectedAccount,
-      date: today.toISOString().slice(0, 10),
+    await handleRecord({
+      selectedType,
+      amount,
+      selectedAccount,
+      currentBalance: acc.balance,
+      updateLocalBalance: (newBalance) =>
+        setAccounts((prev) =>
+          prev.map((a) =>
+            a.name === selectedAccount ? { ...a, balance: newBalance } : a
+          )
+        ),
     });
 
-    // 如果是支出且有符合的限額，就累加 spent（並寫回 Firebase）
-    if (selectedType === "expense") {
-      const matchedLimit = limits.find(
-        (limit) =>
-          limit.account === selectedAccount && isLimitActive(limit.startDate)
-      );
-
-      if (matchedLimit) {
-        const newSpent = matchedLimit.spent + parseInt(amount);
-
-        // 本地更新
-        setLimits((prev) =>
-          prev.map((l) =>
-            l.id === matchedLimit.id ? { ...l, spent: newSpent } : l
-          )
-        );
-
-        // Firebase 更新
-        const limitDocRef = doc(db, "limits", userId, "items", matchedLimit.id);
-        await updateDoc(limitDocRef, {
-          spent: newSpent,
-        });
-      }
-    }
-
-    // 清空輸入
     setAmount("");
     setSelectedAccount("");
   };
@@ -229,7 +203,7 @@ export default function HomePage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Button className="w-full" onClick={handleRecord}>
+              <Button className="w-full" onClick={onRecord}>
                 記錄支出
               </Button>
             </CardContent>
@@ -260,7 +234,7 @@ export default function HomePage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Button className="w-full" onClick={handleRecord}>
+              <Button className="w-full" onClick={onRecord}>
                 記錄收入
               </Button>
             </CardContent>

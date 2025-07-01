@@ -13,13 +13,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { db, auth } from "@/lib/firebase";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import { useHandleRecord } from "@/hooks/useHandleRecord";
 
 export default function BusinessHomePage() {
   const [balance, setBalance] = useState<Record<string, number>>({});
@@ -68,41 +63,21 @@ export default function BusinessHomePage() {
     fetchData();
   }, []);
 
-  const handleRecord = async () => {
-    if (!auth.currentUser || !amount || !selectedCategory || !selectedAccount)
-      return;
-    const userId = auth.currentUser.uid;
-    const recordsRef = collection(db, "records", userId, "items");
+  const handleRecord = useHandleRecord({ mode: "business" });
 
-    const type = selectedType === "expense" ? "支出" : "收入";
-    const newAmount = parseInt(amount);
+  const onRecord = async () => {
+    if (!selectedCategory) return;
 
-    await addDoc(recordsRef, {
-      type,
-      amount: newAmount,
-      detail,
+    await handleRecord({
+      selectedType,
+      amount,
+      selectedAccount,
+      currentBalance: balance[selectedAccount] ?? 0,
+      updateLocalBalance: (newBalance) =>
+        setBalance((prev) => ({ ...prev, [selectedAccount]: newBalance })),
       category: selectedCategory,
-      account: selectedAccount,
-      date: new Date().toISOString().slice(0, 10),
+      detail,
     });
-
-    const accountRef = doc(
-      db,
-      "accounts",
-      userId,
-      "userAccounts",
-      selectedAccount
-    );
-    const newBalance =
-      (balance[selectedAccount] ?? 0) +
-      (selectedType === "income" ? newAmount : -newAmount);
-
-    await updateDoc(accountRef, { balance: newBalance });
-
-    setBalance((prev) => ({
-      ...prev,
-      [selectedAccount]: newBalance,
-    }));
 
     setAmount("");
     setDetail("");
@@ -185,7 +160,7 @@ export default function BusinessHomePage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Button className="w-full" onClick={handleRecord}>
+              <Button className="w-full" onClick={onRecord}>
                 記錄支出
               </Button>
             </CardContent>
@@ -236,7 +211,7 @@ export default function BusinessHomePage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Button className="w-full" onClick={handleRecord}>
+              <Button className="w-full" onClick={onRecord}>
                 記錄收入
               </Button>
             </CardContent>
