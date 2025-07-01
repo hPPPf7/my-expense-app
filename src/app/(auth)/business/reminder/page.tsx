@@ -16,8 +16,14 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
 
+interface Reminder {
+  id: string;
+  text: string;
+  date: string;
+}
+
 export default function BusinessReminderPage() {
-  const [reminders, setReminders] = useState<any[]>([]);
+  const [reminders, setReminders] = useState<Reminder[]>([]);
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
 

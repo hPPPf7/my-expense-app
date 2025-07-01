@@ -16,15 +16,23 @@ import {
   collection,
   getDocs,
   addDoc,
-  doc,
-  updateDoc,
   query,
   orderBy,
 } from "firebase/firestore";
 
+interface TransferRecord {
+  id: string;
+  from: string;
+  to: string;
+  amount: number;
+  fee: number;
+  note: string;
+  date: string;
+}
+
 export default function TransferPage() {
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [records, setRecords] = useState<any[]>([]);
+  const [records, setRecords] = useState<TransferRecord[]>([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");

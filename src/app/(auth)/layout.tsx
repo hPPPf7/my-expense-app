@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "@/lib/firebase";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
@@ -10,14 +10,11 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   const auth = getAuth(app);
 
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
         router.replace("/login"); // ❌ 未登入 → 導向 login
-      } else {
-        setUser(currentUser);
       }
       setLoading(false); // ✅ 結束 loading
     });

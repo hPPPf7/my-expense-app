@@ -38,6 +38,15 @@ interface Limit {
   spent: number;
 }
 
+interface RecordItem {
+  type: string;
+  amount: number;
+  account: string;
+  date: string;
+  category: string;
+  detail: string;
+}
+
 interface PanelProps {
   mode: "personal" | "business";
 }
@@ -217,7 +226,7 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
         date: recordDate,
       });
     } else {
-      const recordData: any = {
+      const recordData: RecordItem = {
         type: selectedType === "expense" ? "支出" : "收入",
         amount: parseInt(amount),
         account: selectedAccount,
@@ -303,7 +312,9 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
       <Tabs
         defaultValue="expense"
         className="w-full"
-        onValueChange={(val: any) => setSelectedType(val as any)}
+        onValueChange={(val: "expense" | "income" | "transfer") =>
+          setSelectedType(val)
+        }
       >
         <TabsList className="grid grid-cols-3">
           <TabsTrigger value="expense">支出</TabsTrigger>

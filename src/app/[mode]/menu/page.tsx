@@ -1,10 +1,7 @@
-// src/app/(auth)/[mode]/menu/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
 import { use } from "react";
-import { ListTodo, FileText, BarChart3, Wallet, Bell } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { BarChart3, Wallet, Bell } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { RecordHistoryPanel } from "@/components/RecordHistoryPanel";

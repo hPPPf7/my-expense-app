@@ -21,7 +21,6 @@ import { format, isToday, subDays, isAfter } from "date-fns";
 import { db, auth } from "@/lib/firebase";
 import {
   collection,
-  addDoc,
   getDocs,
   updateDoc,
   deleteDoc,
@@ -43,13 +42,23 @@ const defaultBusinessCategories = [
   "其他支出",
 ];
 
+interface RecordItem {
+  id: string;
+  type: string;
+  category: string;
+  detail: string;
+  account: string;
+  amount: number;
+  date: string;
+}
+
 export default function BusinessRecordHistoryPage() {
   const [selectedFilter, setSelectedFilter] = useState("今天");
   const [selectedCategory, setSelectedCategory] = useState("全部");
-  const [records, setRecords] = useState<any[]>([]);
+  const [records, setRecords] = useState<RecordItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [editItem, setEditItem] = useState<any>(null);
+  const [editItem, setEditItem] = useState<RecordItem | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,11 +121,14 @@ export default function BusinessRecordHistoryPage() {
     return inTimeRange && inCategory;
   });
 
-  const groupedByDate = filtered.reduce((acc: Record<string, any[]>, curr) => {
-    if (!acc[curr.date]) acc[curr.date] = [];
-    acc[curr.date].push(curr);
-    return acc;
-  }, {});
+  const groupedByDate = filtered.reduce(
+    (acc: Record<string, RecordItem[]>, curr) => {
+      if (!acc[curr.date]) acc[curr.date] = [];
+      acc[curr.date].push(curr);
+      return acc;
+    },
+    {}
+  );
 
   const sortedDates = Object.keys(groupedByDate).sort(
     (a, b) => new Date(b).getTime() - new Date(a).getTime()

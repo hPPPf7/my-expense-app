@@ -7,10 +7,15 @@ import { format, differenceInCalendarDays } from "date-fns";
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
 
-const LOCAL_KEY = "limit-config";
+interface Limit {
+  amount: number;
+  days: number;
+  start: string;
+  active: boolean;
+}
 
 export default function LimitPage() {
-  const [limit, setLimit] = useState({
+  const [limit, setLimit] = useState<Limit>({
     amount: 3000,
     days: 14,
     start: "",
@@ -27,7 +32,7 @@ export default function LimitPage() {
         const userLimit = await getDoc(userDocRef);
 
         if (userLimit.exists()) {
-          setLimit(userLimit.data() as any);
+          setLimit(userLimit.data() as Limit);
         }
       }
     };

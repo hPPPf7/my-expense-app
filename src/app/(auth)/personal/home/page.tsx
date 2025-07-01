@@ -198,7 +198,7 @@ export default function HomePage() {
       <Tabs
         defaultValue="expense"
         className="w-full"
-        onValueChange={(val: any) => setSelectedType(val)}
+        onValueChange={(val: "expense" | "income") => setSelectedType(val)}
       >
         <TabsList className="grid grid-cols-2">
           <TabsTrigger value="expense">支出</TabsTrigger>

@@ -19,10 +19,22 @@ import { collection, getDocs } from "firebase/firestore";
 
 const pieColors = ["#f87171", "#fbbf24", "#34d399", "#60a5fa", "#a78bfa"];
 
+interface RecordItem {
+  type: string;
+  category: string;
+  amount: number;
+  date: string;
+}
+interface BarDatum {
+  month: string;
+  支出: number;
+  收入: number;
+}
+
 export default function ReportPage() {
   const [tab, setTab] = useState<"expense" | "income">("expense");
-  const [records, setRecords] = useState<any[]>([]);
-  const [barData, setBarData] = useState<any[]>([]);
+  const [records, setRecords] = useState<RecordItem[]>([]);
+  const [barData, setBarData] = useState<BarDatum[]>([]);
 
   useEffect(() => {
     const fetchRecords = async () => {

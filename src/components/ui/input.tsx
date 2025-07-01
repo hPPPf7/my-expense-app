@@ -1,7 +1,7 @@
 // src/components/ui/input.tsx
 import { InputHTMLAttributes } from "react";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = (props: InputProps) => {
   return (
