@@ -66,7 +66,7 @@ export default function TransferPage() {
         const recordsData = recordsSnapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
-        }));
+        })) as TransferRecord[];
         setRecords(recordsData);
       }
     };
@@ -106,8 +106,8 @@ export default function TransferPage() {
 
     try {
       const transferRef = collection(db, "transfer-records", userId, "records");
-      await addDoc(transferRef, transferRecord);
-      setRecords((prev) => [transferRecord, ...prev]);
+      const docRef = await addDoc(transferRef, transferRecord);
+      setRecords((prev) => [{ id: docRef.id, ...transferRecord }, ...prev]);
 
       // 新增支出紀錄 (轉出)
       const expenseRef = collection(db, "records", userId, "items");

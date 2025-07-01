@@ -109,7 +109,7 @@ export default function RecordHistoryPage() {
       const recordList = recordsSnap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as RecordItem[];
       setRecords(recordList);
     };
 

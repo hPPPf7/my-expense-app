@@ -312,8 +312,8 @@ export function HomeOverviewPanel({ mode }: PanelProps) {
       <Tabs
         defaultValue="expense"
         className="w-full"
-        onValueChange={(val: "expense" | "income" | "transfer") =>
-          setSelectedType(val)
+        onValueChange={(val) =>
+          setSelectedType(val as "expense" | "income" | "transfer")
         }
       >
         <TabsList className="grid grid-cols-3">

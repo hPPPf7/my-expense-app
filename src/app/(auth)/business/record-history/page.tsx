@@ -99,7 +99,7 @@ export default function BusinessRecordHistoryPage() {
       const recordList = recordsSnap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as RecordItem[];
       setRecords(recordList);
     };
 

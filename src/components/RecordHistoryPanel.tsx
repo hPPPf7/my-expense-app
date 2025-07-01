@@ -121,7 +121,7 @@ export function RecordHistoryPanel({ mode }: PanelProps) {
       const recordList = recordsSnap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as RecordItem[];
       setRecords(recordList);
     };
     fetchData();

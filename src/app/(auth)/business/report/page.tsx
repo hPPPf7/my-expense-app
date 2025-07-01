@@ -44,7 +44,7 @@ export default function ReportPage() {
       const recordsRef = collection(db, "records", userId, "items");
       const snapshot = await getDocs(recordsRef);
 
-      const data = snapshot.docs.map((doc) => doc.data());
+      const data = snapshot.docs.map((doc) => doc.data()) as RecordItem[];
       setRecords(data);
 
       // 簡單依月份分組的例子

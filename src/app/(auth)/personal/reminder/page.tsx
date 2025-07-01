@@ -43,7 +43,7 @@ export default function ReminderPage() {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Reminder[];
 
       setReminders(data);
     };
